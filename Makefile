@@ -8,6 +8,7 @@ SRC_FILES := ${wildcard $(SRC_DIR)/*.c}
 DEBUG_FLAGS := -Wall
 
 build $(BIN): $(SRC_FILES)
+	mkdir -p $(BIN_DIR)
 	cc $(SRC_FILES) $(DEBUG_FLAGS) -o $(BIN)
 
 run: $(BIN)
