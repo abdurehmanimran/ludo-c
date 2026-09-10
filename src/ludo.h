@@ -8,20 +8,34 @@
 #define IS_INSIDE(x) x > 50
 #define FINISHED(x)  x >= 56
 
-#define FIRST_SPAWN  0
-#define SECOND_SPAWN 13
-#define THIRD_SPAWN  26
-#define FOURTH_SPAWN 39
+#define SPAWN_A 0
+#define SPAWN_B 13
+#define SPAWN_C 26
+#define SPAWN_D 39
 
-#define FIRST_STAR  8
-#define SECOND_STAR 21
-#define THIRD_STAR  31
-#define FOURTH_STAR 44
+#define STAR_A 8
+#define STAR_B 21
+#define STAR_C 31
+#define STAR_D 44
 
 #define IS_PROTECTED(x)                                                        \
-  x == FIRST_SPAWN || x == SECOND_SPAWN || x == THIRD_SPAWN ||                 \
-      x == FOURTH_SPAWN || x == FIRST_STAR || x == SECOND_STAR ||              \
-      x == THIRD_STAR || x == FOURTH_STAR
+  x == SPAWN_A || x == SPAWN_B || x == SPAWN_C || x == SPAWN_D ||              \
+  x == STAR_A || x == STAR_B || x == STAR_C || x == STAR_D
+
+#define A 1
+#define B 1 << 1
+#define C 1 << 2
+#define D 1 << 3
+
+#define PLACE_A(x) x |= A
+#define PLACE_B(x) x |= B
+#define PLACE_C(x) x |= C
+#define PLACE_D(x) x |= D
+
+#define IS_A(x) x &A
+#define IS_B(x) x &B
+#define IS_C(x) x &C
+#define IS_D(x) x &D
 
 typedef uint8_t u8;
 
@@ -38,8 +52,8 @@ typedef struct {
 
 typedef struct {
   u8     current_player;
-  i32    map[52];
+  u8     map[52];
   Player players[4];
-} Game;
+} Game; // 136 Bytes
 
 #endif
