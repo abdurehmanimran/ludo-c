@@ -3,11 +3,12 @@
 
 #include <stdio.h>
 
-static char fullMap[15][15];
+static u32 fullMap[15][15];
 
 static u8 houseCords[4][2] = {{0, 0}, {9, 0}, {0, 9}, {9, 9}};
 
-#define HOUSE_CHAR ' ' // Clean
+#define HOUSE_CHAR       ' ' // Clean
+#define MIDDLE_LINE_CHAR '*'
 
 void drawHouse(u8 x, u8 y) {
   for (u32 i = y, j = x; j < x + 6; j++)
@@ -23,41 +24,35 @@ void drawHouse(u8 x, u8 y) {
     PLACE(HOUSE, fullMap[i][j]);
 }
 
-// TODO: rewrite using bit flags
 void drawCenter() {
-  fullMap[6][6] = HOUSE_CHAR;
-  fullMap[6][8] = HOUSE_CHAR;
-  fullMap[8][6] = HOUSE_CHAR;
-  fullMap[8][8] = HOUSE_CHAR;
+  PLACE(HOUSE, fullMap[6][6]);
+  PLACE(HOUSE, fullMap[6][8]);
+  PLACE(HOUSE, fullMap[8][6]);
+  PLACE(HOUSE, fullMap[8][8]);
 
-  fullMap[7][7] = HOUSE_CHAR;
+  PLACE(HOUSE, fullMap[7][7]);
 }
 
-// TODO: rewrite using bit flags
 void drawMiddleLines() {
   for (u8 i = 1; i < 6; i++)
-    if (IS_EMPTY(fullMap[7][i]))
-      fullMap[7][i] = '/';
+    PLACE(MIDDLE_LINE, fullMap[7][i]);
 
   for (u8 i = 9; i < 14; i++)
-    if (IS_EMPTY(fullMap[7][i]))
-      fullMap[7][i] = '/';
+    PLACE(MIDDLE_LINE, fullMap[7][i]);
 
   for (u8 i = 1; i < 6; i++)
-    if (IS_EMPTY(fullMap[i][7]))
-      fullMap[i][7] = '/';
+    PLACE(MIDDLE_LINE, fullMap[i][7]);
 
   for (u8 i = 9; i < 14; i++)
-    if (IS_EMPTY(fullMap[i][7]))
-      fullMap[i][7] = '/';
+    PLACE(MIDDLE_LINE, fullMap[i][7]);
 }
 
 void initMap() {
   for (u8 i = 0; i < sizeof(houseCords) / sizeof(*houseCords); i++)
     drawHouse(houseCords[i][0], houseCords[i][1]);
 
-  // drawCenter();
-  // drawMiddleLines();
+  drawCenter();
+  drawMiddleLines();
 }
 
 void setHousePieces(const Game *game) {
@@ -87,6 +82,8 @@ void displayGame() {
         printf(" a ");
       else if (IS(HOUSE, fullMap[y][x]))
         printf(" %c ", HOUSE_CHAR);
+      else if (IS(MIDDLE_LINE, fullMap[y][x]))
+        printf(" %c ", MIDDLE_LINE_CHAR);
       else if (IS(PIECE, fullMap[y][x]))
         printf(" %d ", fullMap[y][x] - PIECE);
       else if (fullMap[y][x])

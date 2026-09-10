@@ -3,10 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 void init_game(Game *game) {
   game->current_player = 0;
+  memset(game->map, 0, sizeof(game->map));
 
   for (int i = 0; i < sizeof(game->players) / sizeof(*game->players); i++) {
     game->players[i].kills = 0;

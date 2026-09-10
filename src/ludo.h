@@ -31,6 +31,8 @@
 #define C (1 << 7)
 #define D (1 << 8)
 
+#define MIDDLE_LINE (1 << 9)
+
 // Place x on y e.g A on x
 #define PLACE(x, y) (y |= x)
 
@@ -54,8 +56,8 @@ typedef struct {
 
 typedef struct {
   u8     current_player;
-  u8     map[52];
+  u32    map[52];
   Player players[4];
-} Game; // 136 Bytes
+} Game; // 292 Bytes
 
 #endif
