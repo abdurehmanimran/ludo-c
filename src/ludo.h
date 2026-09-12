@@ -53,14 +53,14 @@ typedef int32_t i32;
 typedef int64_t i64;
 
 typedef struct {
-  u32 kills;
-  i32 locations[4];
-} Player; // 20 Bytes
+  u8 kills;
+  i8 locations[4];
+} Player; // 5 Bytes
 
 typedef struct {
   u8     current_player;
   u32    map[52];
   Player players[4];
-} Game; // 292 Bytes
+} Game; // 232 Bytes
 
 #endif

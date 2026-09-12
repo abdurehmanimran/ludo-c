@@ -1,26 +1,22 @@
 #include "draw.h"
+#include "display.h"
 #include "ludo.h"
-
-#include <stdio.h>
 
 static u32 fullMap[15][15];
 
 static u8 houseCords[4][2] = {{0, 0}, {9, 0}, {0, 9}, {9, 9}};
 
-#define HOUSE_CHAR       ' ' // Clean
-#define MIDDLE_LINE_CHAR '*'
-
 void drawHouse(u8 x, u8 y) {
-  for (u32 i = y, j = x; j < x + 6; j++)
+  for (u8 i = y, j = x; j < x + 6; j++)
     PLACE(HOUSE, fullMap[i][j]);
 
-  for (u32 i = y + 5, j = x; j < x + 6; j++)
+  for (u8 i = y + 5, j = x; j < x + 6; j++)
     PLACE(HOUSE, fullMap[i][j]);
 
-  for (u32 i = y + 1, j = x; i < y + 6; i++)
+  for (u8 i = y + 1, j = x; i < y + 6; i++)
     PLACE(HOUSE, fullMap[i][j]);
 
-  for (u32 i = y + 1, j = x + 5; i < y + 6; i++)
+  for (u8 i = y + 1, j = x + 5; i < y + 6; i++)
     PLACE(HOUSE, fullMap[i][j]);
 }
 
@@ -68,15 +64,15 @@ void setHousePieces(const Game *game) {
   }
 }
 
+// Maps the linear game map arr to the fullMap
 void placeMapPieces(const Game *game) {
   u32 mapIter = 0;
 
   for (u8 x = 0; x < 6; x++)
     fullMap[6][x] = game->map[mapIter++];
 
-  for (i8 y = 5; y >= 0; y--) {
+  for (i8 y = 5; y >= 0; y--)
     fullMap[y][6] = game->map[mapIter++];
-  }
 
   fullMap[0][7] = game->map[mapIter++];
 
@@ -108,27 +104,7 @@ void placeMapPieces(const Game *game) {
 void drawMap(const Game *game) {
   setHousePieces(game);
   placeMapPieces(game);
-};
 
-void displayGame() {
-  for (u32 y = 0; y < sizeof(fullMap) / sizeof(*fullMap); y++) {
-    for (u32 x = 0; x < sizeof(*fullMap) / sizeof(**fullMap); x++)
-      if (IS(A, fullMap[y][x]))
-        printf(" a ");
-      else if (IS(B, fullMap[y][x]))
-        printf(" b ");
-      else if (IS(C, fullMap[y][x]))
-        printf(" c ");
-      else if (IS(D, fullMap[y][x]))
-        printf(" d ");
-      else if (IS(HOUSE, fullMap[y][x]))
-        printf(" %c ", HOUSE_CHAR);
-      else if (IS(MIDDLE_LINE, fullMap[y][x]))
-        printf(" %c ", MIDDLE_LINE_CHAR);
-      else if (IS(PIECE, fullMap[y][x]))
-        printf(" %d ", fullMap[y][x] - PIECE);
-      else
-        printf(" - ");
-    printf("\n");
-  }
-}
+  // Also display to the screen
+  displayGame(fullMap);
+};
