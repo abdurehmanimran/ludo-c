@@ -4,7 +4,7 @@
 
 static u32 fullMap[15][15];
 
-static u8 houseCords[4][2] = {{0, 0}, {9, 0}, {0, 9}, {9, 9}};
+static u8 houseCords[4][2] = {{0, 0}, {9, 0}, {9, 9}, {0, 9}};
 
 void drawHouse(u8 x, u8 y) {
   for (u8 i = y, j = x; j < x + 6; j++)
