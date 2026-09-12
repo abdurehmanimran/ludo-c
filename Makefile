@@ -1,4 +1,4 @@
-NAME := ludo-c
+NAME := bitLudo
 BIN_DIR := bin
 BIN := $(BIN_DIR)/$(NAME)
 
