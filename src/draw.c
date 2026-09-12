@@ -95,7 +95,7 @@ void placeMapPieces(const Game *game) {
   for (u8 y = 14; y >= 9; y--)
     fullMap[y][6] = game->map[mapIter++];
 
-  for (u8 x = 0; x < 6; x++)
+  for (i8 x = 5; x >= 0; x--)
     fullMap[8][x] = game->map[mapIter++];
 
   fullMap[0][0] = game->map[mapIter++];
