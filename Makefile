@@ -5,7 +5,7 @@ BIN := $(BIN_DIR)/$(NAME)
 SRC_DIR := src
 SRC_FILES := ${wildcard $(SRC_DIR)/*.c}
 
-DEBUG_FLAGS := -Wall
+DEBUG_FLAGS := -Wall -Wextra -fsanitize=address
 
 build $(BIN): $(SRC_FILES)
 	mkdir -p $(BIN_DIR)
