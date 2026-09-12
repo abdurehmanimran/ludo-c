@@ -66,20 +66,27 @@ void eliminateOthers(u32 playerBits, u8 location, Game *game) {
 
   switch (game->map[location]) {
   case A:
-    if (playerBits != A)
-      player = 0;
+    if (IS(A, playerBits))
+      return;
+    player = 0;
     break;
   case B:
-    if (playerBits != B)
-      player = 1;
+    if (IS(B, playerBits))
+      return;
+    player = 1;
     break;
   case C:
-    if (playerBits != C)
-      player = 2;
+    if (IS(C, playerBits))
+      return;
+    player = 2;
     break;
   case D:
-    if (playerBits != D)
-      player = 3;
+    if (IS(D, playerBits))
+      return;
+    player = 3;
+    break;
+  default:
+    return;
     break;
   }
 
@@ -95,18 +102,9 @@ void eliminateOthers(u32 playerBits, u8 location, Game *game) {
 
 void moveAhead(u8 player, u8 piece, u8 steps, Game *game) {
   u8 oldLoc = game->players[player].locations[piece];
-  u8 newLoc = oldLoc + steps;
+  u8 newLoc = (oldLoc + steps) % 52;
 
   u32 p = getPlayerBits(player);
-
-  // Change the location for that piece
-  game->players[player].locations[piece] = newLoc;
-
-  if (!IS_EMPTY(game->map[newLoc]) && !IS_PROTECTED(game->map[newLoc])) {
-    eliminateOthers(p, newLoc, game);
-  }
-
-  PLACE(p, game->map[newLoc]);
 
   // Remove that player from game's map if it is the sole one
   u8 sole = 1;
@@ -120,6 +118,21 @@ void moveAhead(u8 player, u8 piece, u8 steps, Game *game) {
 
   if (sole)
     PICK(p, game->map[oldLoc]);
+
+  // Change the location for that piece
+  game->players[player].locations[piece] = newLoc;
+  game->players[player].covered[piece] += steps;
+
+  // When the piece has left the outer map
+  if (game->players[player].covered[piece] > 50)
+    return;
+
+  // Placing the moved piece at new location
+  if (!IS_PROTECTED(newLoc)) {
+    eliminateOthers(p, newLoc, game);
+  }
+
+  PLACE(p, game->map[newLoc]);
 }
 
 void playTurn(u8 player, Game *game) {
@@ -156,6 +169,7 @@ void playTurn(u8 player, Game *game) {
           if (game->players[player].locations[lockPiece] == LOCKED) {
             unlockPiece(player, lockPiece, game);
             unlockedPieces[unlockedCount++] = lockPiece;
+            printf("added : %d\n", unlockedCount);
             break;
           }
         }
@@ -164,26 +178,30 @@ void playTurn(u8 player, Game *game) {
       }
     }
 
-    printf("Which piece do you want to move?\n");
-    for (u8 i = 0; i < unlockedCount; i++) {
-      printf(":: %u\t", unlockedPieces[i]);
-    }
-    while (1) {
-      u32 movePiece;
-      u32 done = 0;
-      printf("\n-> ");
-      scanf(" %u", &movePiece);
-
+    if (unlockedCount == 1) {
+      moveAhead(player, unlockedPieces[unlockedCount - 1], num, game);
+    } else {
+      printf("Which piece do you want to move?\n");
       for (u8 i = 0; i < unlockedCount; i++) {
-        if (unlockedPieces[i] == (i8)movePiece) {
-          moveAhead(player, movePiece, num, game);
-          done = 1;
-          break;
-        }
+        printf(":: %u\t", unlockedPieces[i]);
       }
+      while (1) {
+        u32 movePiece;
+        u32 done = 0;
+        printf("\n-> ");
+        scanf(" %u", &movePiece);
 
-      if (done)
-        break;
+        for (u8 i = 0; i < unlockedCount; i++) {
+          if (unlockedPieces[i] == (i8)movePiece) {
+            moveAhead(player, movePiece, num, game);
+            done = 1;
+            break;
+          }
+        }
+
+        if (done)
+          break;
+      }
     }
 
     if (num != 6)
