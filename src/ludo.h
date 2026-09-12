@@ -42,7 +42,7 @@
 // Is y x or x y?
 #define IS(x, y) (x & y)
 
-#define IS_EMPTY(x) !IS(x, A) && !IS(x, B) && !IS(x, C) && !IS(x, D)
+#define IS_EMPTY(x) (!IS(x, A) && !IS(x, B) && !IS(x, C) && !IS(x, D))
 
 typedef uint8_t u8;
 typedef int8_t  i8;
@@ -56,12 +56,13 @@ typedef int64_t i64;
 typedef struct {
   u8 kills;
   i8 locations[4];
-} Player; // 5 Bytes
+  u8 covered[4];
+} Player; // 9 Bytes
 
 typedef struct {
   u8     current_player;
   u32    map[52];
   Player players[4];
-} Game; // 232 Bytes
+} Game; // 248 Bytes
 
 #endif

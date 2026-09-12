@@ -8,16 +8,14 @@
 #include <unistd.h>
 
 void init_game(Game *game) {
-  game->current_player = 0;
-  memset(game->map, 0, sizeof(game->map));
+  memset(game, 0, sizeof(*game));
 
   for (u32 i = 0; i < sizeof(game->players) / sizeof(*game->players); i++) {
-    game->players[i].kills = 0;
-
     for (u32 l = 0; l < sizeof(game->players[i].locations) /
                         sizeof(*game->players[i].locations);
-         l++)
+         l++) {
       game->players[i].locations[l] = LOCKED;
+    }
   }
 };
 
