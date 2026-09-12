@@ -19,8 +19,9 @@
 #define STAR_D 45
 
 #define IS_PROTECTED(x)                                                        \
+  (                                                                            \
   x == SPAWN_A || x == SPAWN_B || x == SPAWN_C || x == SPAWN_D ||              \
-  x == STAR_A || x == STAR_B || x == STAR_C || x == STAR_D
+  x == STAR_A || x == STAR_B || x == STAR_C || x == STAR_D)
 
 // Bit Fields/Flags for different things
 #define PIECE (1 << 3)

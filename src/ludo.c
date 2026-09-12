@@ -2,7 +2,6 @@
 #include "draw.h"
 #include "piece.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -27,19 +26,16 @@ int main() {
 
   Game main_game;
   init_game(&main_game);
-
-  unlockPiece(1, 0, &main_game);
-  unlockPiece(2, 2, &main_game);
-  unlockPiece(3, 3, &main_game);
-
   initMap();
+
+  u8 currPlayer = 0;
 
   while (1) {
     drawMap(&main_game);
+    playTurn(currPlayer, &main_game);
 
-    sleep(2);
-    printf("\n");
-    unlockPiece(0, 0, &main_game);
+    currPlayer++;
+    currPlayer %= 4;
   }
 
   return 0;
