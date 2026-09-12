@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 void init_game(Game *game) {
   game->current_player = 0;
@@ -64,14 +65,19 @@ int main() {
   Game main_game;
   init_game(&main_game);
 
-  unlockPiece(0, 0, &main_game);
   unlockPiece(1, 0, &main_game);
   unlockPiece(2, 2, &main_game);
   unlockPiece(3, 3, &main_game);
 
   initMap();
-  drawMap(&main_game);
-  displayGame();
+
+  while (1) {
+    drawMap(&main_game);
+    displayGame();
+
+    sleep(5);
+    unlockPiece(0, 0, &main_game);
+  }
 
   return 0;
 }

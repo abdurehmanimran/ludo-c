@@ -36,12 +36,15 @@
 // Place x on y e.g A on x
 #define PLACE(x, y) (y |= x)
 
+#define PICK(x, y) (y &= ~x)
+
 // Is y x or x y?
 #define IS(x, y) (x & y)
 
 #define IS_EMPTY(x) !IS(x, A) && !IS(x, B) && !IS(x, C) && !IS(x, D)
 
 typedef uint8_t u8;
+typedef int8_t  i8;
 
 typedef uint32_t u32;
 typedef uint64_t u64;
