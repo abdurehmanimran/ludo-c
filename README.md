@@ -1,2 +1,2 @@
-# Ludo-C
-Simple Terminal Ludo Game in C!!
+# bitLudo
+Simple Terminal Ludo Game made in C using bits!!
