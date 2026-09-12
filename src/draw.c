@@ -64,6 +64,28 @@ void setHousePieces(const Game *game) {
   }
 }
 
+void setLinePieces(const Game *game) {
+  for (u8 i = 0; i < 4; i++) {
+    if (game->players[0].covered[i] > 50)
+      PLACE(A, fullMap[7][game->players[0].covered[i] - 50]);
+  }
+
+  for (u8 i = 0; i < 4; i++) {
+    if (game->players[2].covered[i] > 50)
+      PLACE(B, fullMap[game->players[0].covered[i] - 50][7]);
+  }
+
+  for (u8 i = 0; i < 4; i++) {
+    if (game->players[2].covered[i] > 50)
+      PLACE(C, fullMap[7][8 + game->players[0].covered[i] - 50]);
+  }
+
+  for (u8 i = 0; i < 4; i++) {
+    if (game->players[3].covered[i] > 50)
+      PLACE(D, fullMap[8 + game->players[0].covered[i] - 50][7]);
+  }
+}
+
 // Maps the linear game map arr to the fullMap
 void placeMapPieces(const Game *game) {
   u32 mapIter = 0;
@@ -90,7 +112,7 @@ void placeMapPieces(const Game *game) {
   for (u8 y = 9; y < 15; y++)
     fullMap[y][8] = game->map[mapIter++];
 
-  fullMap[14][14] = game->map[mapIter++];
+  fullMap[14][7] = game->map[mapIter++];
 
   for (u8 y = 14; y >= 9; y--)
     fullMap[y][6] = game->map[mapIter++];
@@ -98,12 +120,13 @@ void placeMapPieces(const Game *game) {
   for (i8 x = 5; x >= 0; x--)
     fullMap[8][x] = game->map[mapIter++];
 
-  fullMap[0][0] = game->map[mapIter++];
+  fullMap[7][0] = game->map[mapIter++];
 }
 
 void drawMap(const Game *game) {
   setHousePieces(game);
   placeMapPieces(game);
+  setLinePieces(game);
 
   // Also display to the screen
   displayGame(fullMap);
